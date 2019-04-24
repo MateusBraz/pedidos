@@ -1,13 +1,8 @@
 package br.com.apsoo.pedidos;
 
-import br.com.apsoo.pedidos.domain.Categoria;
-import br.com.apsoo.pedidos.domain.Cidade;
-import br.com.apsoo.pedidos.domain.Estado;
-import br.com.apsoo.pedidos.domain.Produto;
-import br.com.apsoo.pedidos.repository.CategoriaRepository;
-import br.com.apsoo.pedidos.repository.CidadeRepository;
-import br.com.apsoo.pedidos.repository.EstadoRepository;
-import br.com.apsoo.pedidos.repository.ProdutoRepository;
+import br.com.apsoo.pedidos.domain.*;
+import br.com.apsoo.pedidos.domain.enumerations.TipoCliente;
+import br.com.apsoo.pedidos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -29,6 +24,12 @@ public class PedidosApplication implements CommandLineRunner {
 
     @Autowired
     private CidadeRepository cidadeRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(PedidosApplication.class, args);
@@ -66,5 +67,18 @@ public class PedidosApplication implements CommandLineRunner {
 
         estadoRepository.saveAll(Arrays.asList(est1, est2));
         cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
+
+        Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+        cli1.getTelefones().addAll((Arrays.asList("40028922", "40028924")));
+
+        Endereco e1 = new Endereco(null, "Rua FLores", "300", "Apto 203", "Jardim", "38220834", c1, cli1);
+        Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", c2, cli1);
+
+        cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+
+        clienteRepository.save(cli1);
+        enderecoRepository.saveAll(Arrays.asList(e1, e2));
+
+
     }
 }
