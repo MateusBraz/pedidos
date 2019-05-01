@@ -1,6 +1,7 @@
 package br.com.apsoo.pedidos.domain;
 
 import br.com.apsoo.pedidos.domain.enumerations.TipoCliente;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,7 +18,7 @@ public class Cliente implements Serializable {
     @Id
     @Column(name = "Cl_ID")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_cliente")
-    private Long id;
+    private Integer id;
 
     @Column(name = "Cl_NOME")
     private String nome;
@@ -31,6 +32,7 @@ public class Cliente implements Serializable {
     @Column(name = "Cl_TIPO")
     private TipoCliente tipo;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos = new ArrayList<>();
 
@@ -38,10 +40,13 @@ public class Cliente implements Serializable {
     @CollectionTable(name = "TB_TELEFONE")
     private Set<String> telefones = new HashSet<>();
 
+    @OneToMany(mappedBy = "cliente")
+    private List<Pedido> pedidos = new ArrayList<>();
+
     public Cliente() {
     }
 
-    public Cliente(Long id, String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
+    public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -49,11 +54,11 @@ public class Cliente implements Serializable {
         this.tipo = tipo;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -71,6 +76,10 @@ public class Cliente implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public String getCpfOuCnpj() {
@@ -103,6 +112,14 @@ public class Cliente implements Serializable {
 
     public void setTelefones(Set<String> telefones) {
         this.telefones = telefones;
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
     }
 
     @Override
