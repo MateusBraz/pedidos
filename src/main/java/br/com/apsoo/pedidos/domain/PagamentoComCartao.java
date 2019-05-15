@@ -16,7 +16,7 @@ public class PagamentoComCartao extends Pagamento {
     @Column(name = "PC_NUMERO_DE_PARCELAS")
     private Integer numeroDeParcelas;
 
-    public PagamentoComCartao(){
+    public PagamentoComCartao() {
 
     }
 

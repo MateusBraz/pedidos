@@ -1,9 +1,14 @@
 package br.com.apsoo.pedidos.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -21,17 +26,21 @@ public class Pedido implements Serializable {
     @Column(name = "PE_INSTANTE")
     private Date instante;
 
-
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "CL_ID")
     private Cliente cliente;
 
+    @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
     private Pagamento pagamento;
 
     @ManyToOne
     @JoinColumn(name = "EN_ID")
     private Endereco endereco;
+
+    @OneToMany(mappedBy = "id.pedido")
+    private Set<ItemPedido> itens = new HashSet<>();
 
     public Pedido() {
 
@@ -82,6 +91,14 @@ public class Pedido implements Serializable {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
     }
 
     @Override
